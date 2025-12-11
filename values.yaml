@@ -25,4 +25,11 @@ web:
       cpu: "250m"
     limits:
       memory: "256Mi"
+
       cpu: "500m"
+
+  autoscaling:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 10
+    targetCPU: 50

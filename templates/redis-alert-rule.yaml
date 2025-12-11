@@ -1,0 +1,29 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: redis-alerts
+  namespace: k8s-learning
+  labels:
+    release: prometheus
+spec:
+  groups:
+  - name: redis.rules
+    rules:
+    - alert: RedisDown
+      expr: up{app="redis"} == 0
+      for: 1m
+      labels:
+        severity: critical
+      annotations:
+        summary: "Redis Instance Down"
+        # 修正了转义语法
+        description: "Redis instance {{ "{{" }} $labels.instance {{ "}}" }} has been down for more than 1 minute."
+
+    - alert: RedisMissing
+      expr: absent(up{app="redis"}) == 1
+      for: 1m
+      labels:
+        severity: warning
+      annotations:
+        summary: "Redis Metrics Missing"
+        description: "Prometheus has not received any metrics from Redis for 1 minute."

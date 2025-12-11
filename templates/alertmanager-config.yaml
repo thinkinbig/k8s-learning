@@ -1,0 +1,24 @@
+apiVersion: monitoring.coreos.com/v1alpha1
+kind: AlertmanagerConfig
+metadata:
+  name: main-config
+  namespace: k8s-learning
+  labels:
+    release: prometheus
+spec:
+  route:
+    groupBy: ["alertname"]
+    groupWait: 30s
+    groupInterval: 5m
+    repeatInterval: 12h
+    receiver: "null-receiver"
+    routes:
+      - matchers:
+          - name: severity
+            value: critical
+        receiver: "critical-receiver"
+
+  receivers:
+    - name: "null-receiver"
+
+    - name: "critical-receiver"

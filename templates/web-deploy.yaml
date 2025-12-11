@@ -3,7 +3,9 @@ kind: Deployment
 metadata:
   name: web-frontend
 spec:
+  {{- if not .Values.web.autoscaling.enabled }}
   replicas: {{ .Values.web.replicas }}
+  {{- end }}
   selector:
     matchLabels:
       app: web
