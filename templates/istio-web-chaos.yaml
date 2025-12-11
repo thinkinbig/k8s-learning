@@ -1,0 +1,17 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: web-chaos
+  namespace: k8s-learning
+spec:
+  hosts:
+    - webservice
+  http:
+    - fault:
+        delay:
+          percentage:
+            value: 100
+          fixedDelay: 5s
+      route:
+        - destination:
+            host: web-service
