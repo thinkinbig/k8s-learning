@@ -1,0 +1,3 @@
+web:
+  replicas: 2           
+  image: "my-web-app:v1"

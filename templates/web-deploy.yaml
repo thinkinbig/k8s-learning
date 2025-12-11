@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-frontend
+spec:
+  replicas: {{ .Values.web.replicas }}
+  selector:
+    matchLabels:
+      app: web
+  template:
+    metadata:
+      labels:
+        app: web
+    spec:
+      containers:
+        - name: python-web
+          image: {{ .Values.web.image }}
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 5000
+
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "250m"
+            limits:
+              memory: "256Mi"
+              cpu: "500m"
+
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 5000
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 5000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+
+          env:
+            - name: REDIS_HOST
+              value: "redis-service"
+
+          volumeMounts:
+            - name: code-volume
+              mountPath: /app
+
+      volumes:
+        - name: code-volume
+          configMap:
+            name: web-code-config
