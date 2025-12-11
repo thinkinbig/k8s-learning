@@ -16,17 +16,10 @@ spec:
         - name: python-web
           image: {{ .Values.web.image }}
           imagePullPolicy: Never
+          resources:
+            {{- toYaml .Values.web.resources | nindent 12 }}
           ports:
             - containerPort: 5000
-
-          resources:
-            requests:
-              memory: "64Mi"
-              cpu: "250m"
-            limits:
-              memory: "256Mi"
-              cpu: "500m"
-
           livenessProbe:
             httpGet:
               path: /

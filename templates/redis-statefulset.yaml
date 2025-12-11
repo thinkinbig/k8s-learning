@@ -16,6 +16,8 @@ spec:
       containers:
         - name: redis
           image: redis:alpine
+          resources:
+            {{- toYaml .Values.redis.resources | nindent 12 }}
           ports:
             - containerPort: 6379
           volumeMounts:
@@ -23,6 +25,8 @@ spec:
               mountPath: /data
         - name: metrics
           image: oliver006/redis_exporter:v1.55.0-alpine
+          resources:
+            {{- toYaml .Values.redis.metrics.resources | nindent 12 }}
           ports:
           - containerPort: 9121
             name: metrics
